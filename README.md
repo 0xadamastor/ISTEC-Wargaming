@@ -30,8 +30,9 @@ Criar um **laboratório reproducível** com artefactos, scripts, deteções, pla
 ## 📚 Indice (Table of Contents)
 
 1. [Como usar](#-como-usar)
-3. [Ferramentas e regras](#-ferramentas-e-regras)
-4. [Checklist Purple Team](#-checklist-purple-team)
+2. [Ferramentas e regras](#-ferramentas-e-regras)
+3. [Checklist Purple Team](#-checklist-purple-team)
+4. [Ideias para Projeto](#-ideias-para-projeto)
 5. [Contribuir](#-contribuir)
 6. [Licença](#-licen%C3%A7a)
 
@@ -66,6 +67,18 @@ docker-compose up -d
 # ✅ Checklist Purple Team
 
 * [ ] Fazer alguma coisa!
+* [ ] Defenir um nome para a ideia do diário
+* [ ] Escolher a plataforma, ferramenta e linguagem do diário
+---
+
+## 💡 Ideias para Projeto
+
+### 1. **Diário Hacker** — `diariohacker/`
+Nomes(ideias): Ainda a defenir ideias
+Plataforma(ideias): Provavelmente algo multiplataforma
+Ferramenta(ideias): Depende um bocadinho da linguagem escolhida
+Linguagem(ideias): Python(Mais simples, mas lento, nível mais alto da máquina), C++(Mais rápido, o nível mais baixo da máquina)
+
 ---
 
 # 🤝 Contribuir
