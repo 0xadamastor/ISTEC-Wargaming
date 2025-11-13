@@ -66,7 +66,7 @@ docker-compose up -d
 
 # ✅ Checklist Purple Team
 
-* [X] Fazer alguma coisa!
+* [x] Fazer alguma coisa!
 * [ ] Defenir um nome para o projeto do diário
 * [ ] Escolher a plataforma, ferramenta e linguagem do diário
 ---
