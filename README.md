@@ -1,5 +1,14 @@
 # ISTEC-Wargaming
 
+```
+    _          _   _  __  __                  
+   / \   _ __ | |_(_) \ \/ /___ _ __ _____  __
+  / _ \ | '_ \| __| |  \  // _ \ '__/ _ \ \/ /
+ / ___ \| | | | |_| |  /  \  __/ | | (_) >  < 
+/_/   \_\_| |_|\__|_| /_/\_\___|_|  \___/_/\_\
+
+```
+
 > Uma **playground** para exercícios de defesa (Blue Team), ataque (Red Team) e colaboração (Purple Team).
 > Usamos este repositório para treinar deteções, simular incidentes, construir playbooks e melhorar a resiliência da tua infra.
 
@@ -21,8 +30,7 @@ Criar um **laboratório reproducível** com artefactos, scripts, deteções, pla
 ## 📚 Indice (Table of Contents)
 
 1. [Como usar](#-como-usar)
-2. [Exercícios sugeridos](#-exerc%C3%ADcios-sugeridos)
-3. [Templates úteis](#-templates-%C3%BAteis)
+3. [Templates úteis](#-ferramentas-e-regras)
 4. [Checklist Purple Team](#-checklist-purple-team)
 5. [Contribuir](#-contribuir)
 6. [Licença](#-licen%C3%A7a)
@@ -34,7 +42,7 @@ Criar um **laboratório reproducível** com artefactos, scripts, deteções, pla
 ### 1) Clonar
 
 ```bash
-git clone https://github.com/teu-org/blueteam-redteam-purple.git
+git clone https://github.com/definitelynotrafa/ISTEC-Wargaming.git
 cd ISTEC-Wargaming
 ```
 
@@ -47,7 +55,7 @@ docker-compose up -d
 ```
 ---
 
-# 🛠️ Ferramentas e regras (exemplos)
+# 🛠️ Ferramentas e regras
 
 * **Red Team:**
 * **Blue Team:**
@@ -73,15 +81,3 @@ Contribuições são bem-vindas! Para contribuir:
 # 📜 Licença
 
 Não roubes nada. Se não a tua mãe vai ter uma surpresa logo à noite!
-
-
-```
-  ____  _                _                _____
- |  _ \| |__   ___  _ __| |_ ___  _ __   |_   _|__  _ __ ___
- | |_) | '_ \ / _ \| '__| __/ _ \| '__|    | |/ _ \| '__/ _ \
- |  __/| | | | (_) | |  | || (_) | |       | | (_) | | |  __/
- |_|   |_| |_|\___/|_|   \__\___/|_|       |_|\___/|_|  \___|
-
-```
-
-Diz-me qual queres que eu gere já e eu crio os ficheiros (scripts, playbook ou exercício) diretamente no formato Markdown para copiares para o teu repositório.
