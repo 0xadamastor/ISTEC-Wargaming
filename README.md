@@ -76,13 +76,13 @@ docker-compose up -d
 ### 1. **Diário Hacker** — `diariohacker/`
 
 **Descrição curta**  
-Um diário/registro técnico de pentests e exercícios: cada entrada documenta data, objetivo, TTPs usados, telemetria recolhida e lições aprendidas — ideal para aprendizagem contínua e auditoria.
+Um diário/registro técnico de pentests e exercícios: cada entrada documenta data, objetivo, TTPs usados, telemetria recolhida e vulnerabilidades identificadas — como um mapa mental de um hacker.
 
 **Nomes (ideias)**  
 - PenDaily
 
 **Plataforma (ideias)**  
-- Provavelmente Multiplataforma (markdown + static site) — funciona em qualquer SO e pode publicar como GitHub Pages.  
+- Provavelmente Multiplataforma (markdown + static site) — funciona em qualquer SO.  
 
 **Ferramenta (ideias)**  
 - Base: ficheiros Markdown versionados (`diariohacker/diario.md`).  
