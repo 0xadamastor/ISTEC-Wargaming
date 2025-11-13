@@ -89,7 +89,7 @@ Um diário/registro técnico para pentesters: cada entrada documenta data, objet
 
 **Linguagem (ideias & trade-offs)**  
 - **Python** — Mais simples e rápido para desenvolver; excelente para scripts CLI, parsing e geração de relatórios. (Prós: rapidez de prototipagem; Contras: desempenho puro). 
-- **C++** — Muito rápido e baixo nível, mas geralmente demasiado pesado para esta finalidade; só se precisarmos de processamento intensivo.  
+- **C++** — Muito rápido e baixo nível, mas geralmente demasiado pesado em termos de processamento; só se precisarmos de processamento intensivo.  
 - **JavaScript/Node** — Útil se formos também fazer uma UI web ou SPA integrada.
 
 ---
