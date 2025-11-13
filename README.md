@@ -74,10 +74,23 @@ docker-compose up -d
 ## 💡 Ideias para Projeto
 
 ### 1. **Diário Hacker** — `diariohacker/`
-Nomes(ideias): Ainda a defenir ideias
-Plataforma(ideias): Provavelmente algo multiplataforma
-Ferramenta(ideias): Depende um bocadinho da linguagem escolhida
-Linguagem(ideias): Python(Mais simples, mas lento, nível mais alto da máquina), C++(Mais rápido, o nível mais baixo da máquina)
+
+**Descrição curta**  
+Um diário/registro técnico de pentests e exercícios: cada entrada documenta data, objetivo, TTPs usados, telemetria recolhida e lições aprendidas — ideal para aprendizagem contínua e auditoria.
+
+**Nomes (ideias)**  
+- PenDaily
+
+**Plataforma (ideias)**  
+- Provavelmente Multiplataforma (markdown + static site) — funciona em qualquer SO e pode publicar como GitHub Pages.  
+
+**Ferramenta (ideias)**  
+- Base: ficheiros Markdown versionados (`diariohacker/diario.md`).  
+
+**Linguagem (ideias & trade-offs)**  
+- **Python** — Mais simples e rápido para desenvolver; excelente para scripts CLI, parsing e geração de relatórios. (Prós: rapidez de prototipagem; Contras: desempenho puro). 
+- **C++** — Muito rápido e baixo nível, mas geralmente demasiado pesado para esta finalidade; só se precisarmos de processamento intensivo.  
+- **JavaScript/Node** — Útil se formos também fazer uma UI web ou SPA integrada.
 
 ---
 
