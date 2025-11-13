@@ -71,7 +71,7 @@ docker-compose up -d
 * [ ] Escolher a plataforma, ferramenta e linguagem do diário
 ---
 
-## 💡 Ideias para Projeto
+# 💡 Ideias para Projeto
 
 ### 1. **Diário Hacker** — `diariohacker/`
 
