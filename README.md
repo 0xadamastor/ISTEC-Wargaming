@@ -30,7 +30,7 @@ Criar um **laboratório reproducível** com artefactos, scripts, deteções, pla
 ## 📚 Indice (Table of Contents)
 
 1. [Como usar](#-como-usar)
-3. [Templates úteis](#-ferramentas-e-regras)
+3. [Ferramentas e regras](#-ferramentas-e-regras)
 4. [Checklist Purple Team](#-checklist-purple-team)
 5. [Contribuir](#-contribuir)
 6. [Licença](#-licen%C3%A7a)
