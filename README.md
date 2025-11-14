@@ -81,10 +81,10 @@ Um diário/registro técnico para pentesters: cada entrada documenta data, objet
 **Nomes (ideias)**  
 - BeatRooter
 
-**Plataforma (ideias)**  
-- Provavelmente Multiplataforma (markdown + static site) — funciona em qualquer SO.  
+**Plataforma (defenido)**  
+- Multiplataforma (markdown + CLI) — funciona em qualquer SO.  
 
-**Ferramenta (ideias)**  
+**Ferramenta(s)**  
 - Base: ficheiros Markdown versionados (`diariohacker/diario.md`).  
 
 **Linguagem (ideias & trade-offs)**  
