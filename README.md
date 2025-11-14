@@ -79,7 +79,7 @@ docker-compose up -d
 Um diário/registro técnico para pentesters: cada entrada documenta data, objetivo, TTPs usados, telemetria recolhida e vulnerabilidades identificadas — como um mapa mental de um hacker.
 
 **Nomes (ideias)**  
-- PenDaily
+- BeatRooter
 
 **Plataforma (ideias)**  
 - Provavelmente Multiplataforma (markdown + static site) — funciona em qualquer SO.  
