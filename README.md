@@ -88,7 +88,7 @@ Um diário/registro técnico para pentesters: cada entrada documenta data, objet
 - Multiplataforma (app/program) — funciona em qualquer SO, tirando o MAC. Se o utilizador de MAC quiser trabalhar, abra  o photoshop!
 
 **Ferramenta(s)**  
-- Base: ficheiros Markdown versionados (`BeatRooter/beatrooter.md`).  
+- Base: ficheiros Markdown versionados (`BeatRooter/README.md`).  
 
 **Linguagem (ideias & trade-offs)**  
 - **Python** — Mais simples e rápido para desenvolver; excelente para scripts CLI, parsing e geração de relatórios. (Prós: rapidez de prototipagem; Contras: desempenho puro). 
