@@ -161,6 +161,3 @@ BeatRooter is released under the your MOM License.
   </a>
 </p>
 
----
-
-**BeatRooter** - *Mapping the digital crime scene, one node at a time.* 🔍🛡️
