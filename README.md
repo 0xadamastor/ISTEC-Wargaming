@@ -67,8 +67,11 @@ docker-compose up -d
 # ✅ Checklist Purple Team
 
 * [x] Fazer alguma coisa!
-* [ ] Defenir um nome para o projeto do diário
-* [ ] Escolher a plataforma, ferramenta e linguagem do diário
+* [X] Defenir um nome para o projeto do diário
+* [X] Escolher a plataforma, ferramenta e linguagem do diário
+* [ ] Ir atualizando ideias no BeatRooter
+* [ ] Ir atualizando design no BeatRooter
+* [ ] Ir atualizando código e cyber no BeatRooter
 ---
 
 # 💡 Ideias para Projeto
@@ -85,7 +88,7 @@ Um diário/registro técnico para pentesters: cada entrada documenta data, objet
 - Multiplataforma (app/program) — funciona em qualquer SO, tirando o MAC. Se o utilizador de MAC quiser trabalhar, abra  o photoshop!
 
 **Ferramenta(s)**  
-- Base: ficheiros Markdown versionados (`diariohacker/beatrooter.md`).  
+- Base: ficheiros Markdown versionados (`BeatRooter/beatrooter.md`).  
 
 **Linguagem (ideias & trade-offs)**  
 - **Python** — Mais simples e rápido para desenvolver; excelente para scripts CLI, parsing e geração de relatórios. (Prós: rapidez de prototipagem; Contras: desempenho puro). 
