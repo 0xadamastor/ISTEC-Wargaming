@@ -1,6 +1,9 @@
 # BeatRooter - Cyber Investigation & Threat Mapping Tool
 
-![BeatRooter Logo](https://img.icons8.com/color/96/000000/cyber-security.png)
+<p align="center">
+  <img src="/Assets/BeatRooter_logo.jpg" alt="logo"/>
+</p>
+
 
 ## 📋 Overview
 
@@ -152,10 +155,11 @@ BeatRooter is released under the your MOM License.
 
 ## 🫦 Kiss for devs
 
-- Icons by [Icons8](https://icons8.com)
-- Inspired by modern cyber investigation workflows
-- Built with the PyQt6 framework
-- Security community feedback and testing
+<p align="center">
+  <a href="https://github.com/Samucahub/NataBase/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=Samucahub/NataBase" />
+  </a>
+</p>
 
 ---
 
