@@ -155,9 +155,7 @@ BeatRooter is released under the your MOM License.
 
 ## 🫦 Kiss for devs
 
-<p align="center">
   <a href="https://github.com/Samucahub/NataBase/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=Samucahub/NataBase" />
   </a>
-</p>
 
