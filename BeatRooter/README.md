@@ -1,7 +1,7 @@
 # BeatRooter - Cyber Investigation & Threat Mapping Tool
 
 <p align="center">
-  <img src="/Assets/BeatRooter_logo.jpg" alt="logo"/>
+  <img src="/Assets/BeatRooter_logo.png" alt="logo"/>
 </p>
 
 
