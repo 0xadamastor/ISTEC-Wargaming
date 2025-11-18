@@ -73,23 +73,22 @@ docker-compose up -d
 
 # 💡 Ideias para Projeto
 
-### 1. **Diário Hacker** — `diariohacker/`
+### 1. **Diário Hacker** — `BeatRooter/`
 
 **Descrição curta**  
 Um diário/registro técnico para pentesters: cada entrada documenta data, objetivo, TTPs usados, telemetria recolhida e vulnerabilidades identificadas — como um mapa mental de um hacker.
 
-**Nomes (ideias)**  
+**Nome**  
 - BeatRooter
 
 **Plataforma (defenido)**  
-- Multiplataforma (markdown + CLI) — funciona em qualquer SO.  
+- Multiplataforma (app/program) — funciona em qualquer SO, tirando o MAC. Se o utilizador de MAC quiser trabalhar, abra  o photoshop!
 
 **Ferramenta(s)**  
-- Base: ficheiros Markdown versionados (`diariohacker/diario.md`).  
+- Base: ficheiros Markdown versionados (`diariohacker/beatrooter.md`).  
 
 **Linguagem (ideias & trade-offs)**  
 - **Python** — Mais simples e rápido para desenvolver; excelente para scripts CLI, parsing e geração de relatórios. (Prós: rapidez de prototipagem; Contras: desempenho puro). 
-- **C++** — Muito rápido e baixo nível, mas geralmente demasiado pesado para um início de projeto; só se precisarmos de processamento intensivo.  
 - **JavaScript/Node** — Útil se formos também fazer uma UI web ou SPA integrada.
 
 ---
