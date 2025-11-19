@@ -12,9 +12,10 @@ class DetailPanel(QWidget):
     node_data_updated = pyqtSignal(object)
     node_deleted = pyqtSignal(object)
     
-    def __init__(self):
+    def __init__(self, main_window=None): 
         super().__init__()
         self.current_node = None
+        self.main_window = main_window
         self.setup_ui()
     
     def setup_ui(self):
@@ -157,6 +158,15 @@ class DetailPanel(QWidget):
                 field.addItems(["user", "admin", "root", "system", "unknown"])
             else:
                 field.addItems(["low", "medium", "high", "critical", "unknown"])
+            field.setCurrentText(str(value))
+        elif key in ['analysis_status', 'isolation_level', 'file_type']:
+            field = QComboBox()
+            if key == 'analysis_status':
+                field.addItems(["queued", "in progress", "completed", "failed"])
+            elif key == 'isolation_level':
+                field.addItems(["sandbox", "isolated", "production"])
+            elif key == 'file_type':
+                field.addItems(["PE32", "PE64", "ELF", "Script", "Document", "Other"])
             field.setCurrentText(str(value))
         elif isinstance(value, str) and len(value) > 50:
             field = QTextEdit()
@@ -489,10 +499,21 @@ class DetailPanel(QWidget):
                 self.current_node.data[key] = value.lower() == 'true'
             else:
                 self.current_node.data[key] = value
+        
+        # SALVA ESTADO NO HISTÓRICO
+        if hasattr(self, 'main_window') and self.main_window:
+            self.main_window.graph_manager.save_state(f"Update {self.current_node.type} node field: {key}")
+            self.main_window.update_undo_redo_buttons()
+
     
     def on_notes_changed(self):
         if self.current_node:
             self.current_node.data['notes'] = self.notes_edit.toPlainText()
+            
+            # SALVA ESTADO NO HISTÓRICO
+            if hasattr(self, 'main_window') and self.main_window:
+                self.main_window.graph_manager.save_state(f"Update {self.current_node.type} node notes")
+                self.main_window.update_undo_redo_buttons()
     
     def save_changes(self):
         if self.current_node:

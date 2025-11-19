@@ -20,13 +20,18 @@ from utils.image_utils import ImageUtils
 #from ai.ai_assistant import AIAssistant
 
 class DigitalDetectiveBoard(QMainWindow):
-    def __init__(self):
+    def __init__(self, project_type=None, category=None, template_data=None):
         super().__init__()
         self.graph_manager = GraphManager()
         self.storage_manager = StorageManager()
         self.current_theme = 'cyber_modern'
         self.node_widgets = {}
+        self.edge_items = {}
         self.connection_source = None
+
+        self.project_type = project_type
+        self.category = category
+        self.template_data = template_data
 
         #self.ai_assistant = None
         
@@ -34,7 +39,20 @@ class DigitalDetectiveBoard(QMainWindow):
         self.apply_theme(self.current_theme)
         self.setup_connections()
         
-        self.statusBar().showMessage("Ready - BeatRooter Started")
+        if category:
+            self.toolbox.update_category(category)
+        
+        self.statusBar().showMessage(f"Ready - {self.get_project_title()}")
+
+        self.graph_manager.save_state("Initial state")
+
+    def get_project_title(self):
+        """Retorna o título baseado no projeto/categoria"""
+        if self.project_type and self.category:
+            category_name = self.category.replace('_', ' ').title()
+            project_name = self.project_type.replace('_', ' ').title()
+            return f"{project_name} - {category_name}"
+        return "BeatRooter"
 
     def setup_ui(self):
         self.setWindowTitle("BeatRooter")
@@ -47,8 +65,8 @@ class DigitalDetectiveBoard(QMainWindow):
         
         splitter = QSplitter(Qt.Orientation.Horizontal)
         
-        # Toolbox
-        self.toolbox = ToolboxWidget(self.graph_manager)
+        # Toolbox - PASSA A CATEGORIA
+        self.toolbox = ToolboxWidget(self.graph_manager, self.category)
         splitter.addWidget(self.toolbox)
         
         # Canvas
@@ -56,16 +74,14 @@ class DigitalDetectiveBoard(QMainWindow):
         splitter.addWidget(self.canvas_widget)
         
         # Detail panel
-        self.detail_panel = DetailPanel()
+        self.detail_panel = DetailPanel(self)
         splitter.addWidget(self.detail_panel)
         
         splitter.setSizes([250, 600, 350])
         main_layout.addWidget(splitter)
 
         self.create_menu_bar()
-        
         self.create_toolbar()
-        
         self.setStatusBar(QStatusBar())
     
     def create_menu_bar(self):
@@ -93,6 +109,20 @@ class DigitalDetectiveBoard(QMainWindow):
         save_as_action.setShortcut(QKeySequence.StandardKey.SaveAs)
         save_as_action.triggered.connect(self.save_investigation_as)
         file_menu.addAction(save_as_action)
+        
+        file_menu.addSeparator()
+
+        self.undo_action = QAction('Undo', self)
+        self.undo_action.setShortcut(QKeySequence.StandardKey.Undo)
+        self.undo_action.triggered.connect(self.undo)
+        self.undo_action.setEnabled(False)
+        file_menu.addAction(self.undo_action)
+        
+        self.redo_action = QAction('Redo', self)
+        self.redo_action.setShortcut(QKeySequence.StandardKey.Redo)
+        self.redo_action.triggered.connect(self.redo)
+        self.redo_action.setEnabled(False)
+        file_menu.addAction(self.redo_action)
         
         file_menu.addSeparator()
         
@@ -165,6 +195,18 @@ class DigitalDetectiveBoard(QMainWindow):
         toolbar.addAction(save_action)
         
         toolbar.addSeparator()
+
+        undo_toolbar_action = QAction('Undo', self)
+        undo_toolbar_action.triggered.connect(self.undo)
+        undo_toolbar_action.setEnabled(False)
+        toolbar.addAction(undo_toolbar_action)
+        
+        redo_toolbar_action = QAction('Redo', self)
+        redo_toolbar_action.triggered.connect(self.redo)
+        redo_toolbar_action.setEnabled(False)
+        toolbar.addAction(redo_toolbar_action)
+        
+        toolbar.addSeparator()
         
         zoom_in_action = QAction('+ Zoom In', self)
         zoom_in_action.triggered.connect(self.zoom_in)
@@ -177,18 +219,137 @@ class DigitalDetectiveBoard(QMainWindow):
         reset_zoom_action = QAction('Reset Zoom', self)
         reset_zoom_action.triggered.connect(self.reset_zoom)
         toolbar.addAction(reset_zoom_action)
+
+    def apply_project_template(self, template_config):
+        """Apply project template configuration"""
+        if 'metadata' in template_config:
+            self.graph_manager.graph_data.metadata.update(template_config['metadata'])
+        
+        # Set window title based on template
+        project_title = template_config['metadata'].get('title', 'Untitled Investigation')
+        self.setWindowTitle(f"BeatRooter - {project_title}")
+        
+        # You can add template-specific initialization here
+        # For example, pre-create certain node types based on the template
+        
+        self.statusBar().showMessage(f"Started {project_title} investigation")
     
     def setup_connections(self):
         self.toolbox.node_created.connect(self.create_node)
         
         self.canvas_widget.node_created.connect(self.create_node_visual)
+        self.canvas_widget.connection_requested.connect(self.create_connection)
         
         self.detail_panel.node_data_updated.connect(self.on_node_updated)
         self.detail_panel.node_deleted.connect(self.on_node_deleted)
     
+    def draw_connection(self, edge):
+        if edge.source_id in self.node_widgets and edge.target_id in self.node_widgets:
+            source_widget = self.node_widgets[edge.source_id]
+            target_widget = self.node_widgets[edge.target_id]
+            
+            print(f"Creating connection from {edge.source_id} to {edge.target_id}")
+            
+            edge_item = DynamicEdge(source_widget, target_widget, edge)
+            self.canvas_widget.scene.addItem(edge_item)
+            self.edge_items[edge.id] = edge_item
+    
+    def on_edge_updated(self, edge):
+        """Handle edge updates - já existe no seu código"""
+        print(f"Updating edge: {edge.id} with label: {edge.label}")
+        self.graph_manager.update_edge(edge.id, label=edge.label)
+        self.statusBar().showMessage(f"Updated edge: {edge.label}")
+
+    def on_edge_deleted(self, edge):
+        """Handle edge deletion - já existe no seu código"""
+        print(f"Deleting edge: {edge.id}")
+        
+        reply = QMessageBox.question(self, 'Delete Edge', 
+                                'Are you sure you want to delete this connection?',
+                                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        
+        if reply == QMessageBox.StandardButton.Yes:
+            # Remover do graph manager primeiro
+            self.graph_manager.remove_edge(edge.id)
+            
+            # Remover representação visual
+            if edge.id in self.edge_items:
+                edge_item = self.edge_items[edge.id]
+                self.canvas_widget.scene.removeItem(edge_item)
+                del self.edge_items[edge.id]
+                print(f"Edge {edge.id} removed from scene")
+            
+            # Atualizar os nós conectados
+            if edge.source_id in self.node_widgets:
+                source_node = self.graph_manager.get_node(edge.source_id)
+                if edge.id in source_node.connections:
+                    source_node.connections.remove(edge.id)
+            
+            if edge.target_id in self.node_widgets:
+                target_node = self.graph_manager.get_node(edge.target_id)
+                if edge.id in target_node.connections:
+                    target_node.connections.remove(edge.id)
+            
+            self.statusBar().showMessage("Edge deleted successfully")
+            print(f"Edge {edge.id} completely deleted")
+        else:
+            self.statusBar().showMessage("Edge deletion cancelled")
+
+    def undo(self):
+        """Desfaz a última ação"""
+        if self.graph_manager.undo():
+            self.refresh_canvas_from_graph()
+            self.update_undo_redo_buttons()
+            self.statusBar().showMessage("Undo: " + self.graph_manager.history[self.graph_manager.history_position]['description'])
+    
+    def redo(self):
+        """Refaz a ação desfeita"""
+        if self.graph_manager.redo():
+            self.refresh_canvas_from_graph()
+            self.update_undo_redo_buttons()
+            self.statusBar().showMessage("Redo: " + self.graph_manager.history[self.graph_manager.history_position]['description'])
+    
+    def update_undo_redo_buttons(self):
+        """Atualiza o estado dos botões Undo/Redo"""
+        self.undo_action.setEnabled(self.graph_manager.can_undo())
+        self.redo_action.setEnabled(self.graph_manager.can_redo())
+        
+        # Atualiza também os botões da toolbar
+        for action in self.findChildren(QAction):
+            if action.text() == 'Undo':
+                action.setEnabled(self.graph_manager.can_undo())
+            elif action.text() == 'Redo':
+                action.setEnabled(self.graph_manager.can_redo())
+    
+    def refresh_canvas_from_graph(self):
+        """Atualiza o canvas baseado no estado atual do graph manager"""
+        # Limpa o canvas atual
+        self.canvas_widget.scene.clear()
+        self.node_widgets.clear()
+        self.edge_items.clear()
+        
+        # Recria todos os nós
+        for node in self.graph_manager.graph_data.nodes.values():
+            node_widget = NodeWidget(node, self.category)  # PASSAR CATEGORIA
+            self.canvas_widget.add_node_widget(node_widget)
+            
+            node_widget.node_updated.connect(self.on_node_selected)
+            node_widget.connection_started.connect(self.start_connection)
+            node_widget.node_deleted.connect(self.on_node_deleted)
+            
+            self.node_widgets[node.id] = node_widget
+        
+        # Recria todas as conexões
+        for edge in self.graph_manager.graph_data.edges.values():
+            self.draw_connection(edge)
+        
+        # Limpa o painel de detalhes se o nó atual foi removido
+        if (self.detail_panel.current_node and 
+            self.detail_panel.current_node.id not in self.graph_manager.graph_data.nodes):
+            self.detail_panel.clear_panel()
 
     def create_node_visual(self, node):
-        node_widget = NodeWidget(node)
+        node_widget = NodeWidget(node, self.category)
         self.canvas_widget.add_node_widget(node_widget)
         
         node_widget.node_updated.connect(self.on_node_selected)
@@ -205,11 +366,11 @@ class DigitalDetectiveBoard(QMainWindow):
         view_center = self.canvas_widget.mapToScene(
             self.canvas_widget.viewport().rect().center()
         )
-        
-        node_data = NodeFactory.create_node_data(node_type)
+
+        node_data = NodeFactory.create_node_data(node_type, category=self.category)
         node = self.graph_manager.add_node(node_type, view_center, node_data)
         
-        node_widget = NodeWidget(node)
+        node_widget = NodeWidget(node, self.category)
         self.canvas_widget.add_node_widget(node_widget)
         
         node_widget.node_updated.connect(self.on_node_selected)
@@ -236,34 +397,58 @@ class DigitalDetectiveBoard(QMainWindow):
     
     def on_node_updated(self, node):
         if node.id in self.node_widgets:
-            self.node_widgets[node.id].update()
+            self.node_widgets[node.id].update_display()
+            if hasattr(self, 'edge_items'):
+                for edge_item in self.edge_items.values():
+                    if (edge_item.source_node.node.id == node.id or 
+                        edge_item.target_node.node.id == node.id):
+                        edge_item.update_path()
+        
+        # Salva estado quando um nó é atualizado
+        self.graph_manager.save_state(f"Update {node.type} node")
+        self.update_undo_redo_buttons()
+        
         self.statusBar().showMessage(f"Updated {node.type} node")
-    
+
     def on_node_deleted(self, node):
-        print(f"Deleting node: {node.id}")
+        """Handle node deletion from detail panel"""
+        print(f"Deleting node from detail panel: {node.id}")
         
-        self.graph_manager.remove_node(node.id)
+        reply = QMessageBox.question(self, 'Delete Node', 
+                                   f'Are you sure you want to delete this {node.type} node?',
+                                   QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
         
-        if hasattr(self, 'edge_items'):
+        if reply == QMessageBox.StandardButton.Yes:
+            # Remove do graph manager (que salva estado automaticamente)
+            self.graph_manager.remove_node(node.id)
+            
+            # Remove visualização
+            if node.id in self.node_widgets:
+                node_widget = self.node_widgets[node.id]
+                self.canvas_widget.scene.removeItem(node_widget)
+                del self.node_widgets[node.id]
+            
+            # Remove conexões relacionadas
             edges_to_remove = []
             for edge_id, edge_item in self.edge_items.items():
                 edge = self.graph_manager.get_edge(edge_id)
-                if edge is None:
+                if edge is None or edge.source_id == node.id or edge.target_id == node.id:
                     self.canvas_widget.scene.removeItem(edge_item)
                     edges_to_remove.append(edge_id)
             
             for edge_id in edges_to_remove:
-                del self.edge_items[edge_id]
-        
-        if node.id in self.node_widgets:
-            node_widget = self.node_widgets[node.id]
-            self.canvas_widget.scene.removeItem(node_widget)
-            del self.node_widgets[node.id]
-        
-        if self.detail_panel.current_node and self.detail_panel.current_node.id == node.id:
-            self.detail_panel.clear_panel()
-        
-        self.statusBar().showMessage(f"Deleted {node.type} node and its connections")
+                if edge_id in self.edge_items:
+                    del self.edge_items[edge_id]
+            
+            # Limpa o painel de detalhes
+            if self.detail_panel.current_node and self.detail_panel.current_node.id == node.id:
+                self.detail_panel.clear_panel()
+            
+            # Atualiza botões undo/redo
+            self.update_undo_redo_buttons()
+            
+            self.statusBar().showMessage(f"Deleted {node.type} node and its connections")
+
     
     def start_connection(self, source_widget):
         print(f"Starting connection from node: {source_widget.node.id}")
@@ -280,24 +465,13 @@ class DigitalDetectiveBoard(QMainWindow):
             
             self.draw_connection(edge)
             
+            # Atualiza botões undo/redo
+            self.update_undo_redo_buttons()
+            
             self.statusBar().showMessage(f"Connected {source_id} to {target_id}")
         except ValueError as e:
             self.statusBar().showMessage(f"Connection failed: {e}")
             print(f"Connection error: {e}")
-    1
-    def draw_connection(self, edge):
-        if edge.source_id in self.node_widgets and edge.target_id in self.node_widgets:
-            source_widget = self.node_widgets[edge.source_id]
-            target_widget = self.node_widgets[edge.target_id]
-            
-            print(f"Creating dynamic connection between {edge.source_id} and {edge.target_id}")
-            
-            edge_item = DynamicEdge(source_widget, target_widget, edge)
-            self.canvas_widget.scene.addItem(edge_item)
-
-            if not hasattr(self, 'edge_items'):
-                self.edge_items = {}
-            self.edge_items[edge.id] = edge_item
     
     def search_nodes(self, search_text):
         if not search_text:
@@ -323,23 +497,81 @@ class DigitalDetectiveBoard(QMainWindow):
                 node_widget.setVisible(node_widget.node.type in node_types)
     
     def new_investigation(self):
-        reply = QMessageBox.question(self, 'New Investigation', 
-                                   'Are you sure you want to start a new investigation? Unsaved changes will be lost.',
-                                   QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        from ui.project_selection_dialog import ProjectSelectionDialog
         
-        if reply == QMessageBox.StandardButton.Yes:
+        # Verifica se há mudanças não salvas
+        if self.has_unsaved_changes():
+            reply = QMessageBox.question(self, 'New Investigation', 
+                                    'You have unsaved changes. Are you sure you want to start a new investigation?',
+                                    QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+            
+            if reply == QMessageBox.StandardButton.No:
+                return
+        
+        dialog = ProjectSelectionDialog(self)
+        
+        def on_project_selected(project_type, category):
+            # Limpa a investigação atual
             self.graph_manager.clear_graph()
             self.canvas_widget.scene.clear()
             self.node_widgets.clear()
+            self.edge_items.clear()
             self.detail_panel.clear_panel()
-            self.statusBar().showMessage("New investigation started")
+            
+            # Define o projeto e categoria selecionados
+            self.project_type = project_type
+            self.category = category
+            
+            self.toolbox.update_category(category)
+            
+            # Atualiza o título da janela
+            self.setWindowTitle(f"BeatRooter - {self.get_project_title()}")
+            
+            self.statusBar().showMessage(f"New {project_type} investigation started: {category}")
+        
+        dialog.project_selected.connect(on_project_selected)
+        dialog.exec()
+
+    def has_unsaved_changes(self):
+        """Verifica se há mudanças não salvas (implementação básica)"""
+        # Você pode implementar uma lógica mais sofisticada aqui
+        # Por enquanto, sempre retorna True para ser seguro
+        return len(self.graph_manager.graph_data.nodes) > 0
+
+    def get_project_title(self):
+        """Retorna o título baseado no projeto/categoria"""
+        if hasattr(self, 'project_type') and hasattr(self, 'category') and self.project_type and self.category:
+            # Mapeamento de nomes amigáveis
+            project_names = {
+                'blueteam': 'Blue Team',
+                'soc_team': 'SOC Operations', 
+                'redteam': 'Red Team'
+            }
+            
+            category_names = {
+                'incident_response': 'Incident Response',
+                'threat_hunting': 'Threat Hunting',
+                'malware_analysis': 'Malware Analysis', 
+                'siem_investigation': 'SIEM Investigation',
+                'alert_triage': 'Alert Triage',
+                'correlation_analysis': 'Correlation Analysis',
+                'compliance_monitoring': 'Compliance Monitoring',
+                'web_pentesting': 'Web Application Testing',
+                'network_pentesting': 'Network Assessment',
+                'social_engineering': 'Social Engineering'
+            }
+            
+            project_name = project_names.get(self.project_type, self.project_type.title())
+            category_name = category_names.get(self.category, self.category.replace('_', ' ').title())
+            
+            return f"{project_name} - {category_name}"
+        return "BeatRooter - New Investigation"
 
     def load_graph_data(self, graph_data):
         self.graph_manager.clear_graph()
         self.canvas_widget.scene.clear()
         self.node_widgets.clear()
-        if hasattr(self, 'edge_items'):
-            self.edge_items.clear()
+        self.edge_items.clear()
         
         for node in graph_data.nodes.values():
             self.graph_manager.graph_data.nodes[node.id] = node
@@ -510,6 +742,20 @@ class DigitalDetectiveBoard(QMainWindow):
     
     def closeEvent(self, event):
         event.accept()
+
+    def keyPressEvent(self, event):
+        """Handle keyboard shortcuts"""
+        if event.modifiers() == Qt.KeyboardModifier.ControlModifier:
+            if event.key() == Qt.Key.Key_Z:
+                self.undo()
+                event.accept()
+                return
+            elif event.key() == Qt.Key.Key_Y:
+                self.redo()
+                event.accept()
+                return
+        
+        super().keyPressEvent(event)
     
     def eventFilter(self, obj, event):
         if (obj == self.canvas_widget.viewport() and 

@@ -4,6 +4,7 @@ from PyQt6.QtGui import QPainter, QPen, QColor, QAction, QFont, QBrush, QCursor
 from models.node import Node
 from models.edge import Edge
 from ui.node_widget import NodeWidget
+from ui.dynamic_edge import DynamicEdge
 
 class CanvasWidget(QGraphicsView):
     node_selected = pyqtSignal(object)
@@ -61,10 +62,23 @@ class CanvasWidget(QGraphicsView):
             event.accept()
             return
         
+        # Clear selection when clicking on empty space
+        if event.button() == Qt.MouseButton.LeftButton:
+            item = self.itemAt(event.pos())
+            if not item:
+                self.scene.clearSelection()
+        
         if self.connection_mode and event.button() == Qt.MouseButton.LeftButton:
             self.handle_connection_click(event)
         elif event.button() == Qt.MouseButton.RightButton:
-            self.handle_right_click(event)
+            # MODIFICAÇÃO: Primeiro verifica se clicou em uma edge
+            item = self.itemAt(event.pos())
+            if item and isinstance(item, DynamicEdge):
+                # Se clicou em uma edge, deixa a edge processar o evento
+                super().mousePressEvent(event)
+            else:
+                # Só mostra o menu do canvas se não clicou em uma edge
+                self.handle_right_click(event)
         else:
             super().mousePressEvent(event)
     
@@ -87,6 +101,12 @@ class CanvasWidget(QGraphicsView):
             self.update_temp_connection(mouse_pos)
         
         super().mouseMoveEvent(event)
+
+    def update_node_display(self, node):
+        for item in self.scene.items():
+            if isinstance(item, NodeWidget) and item.node.id == node.id:
+                item.update_display()
+                break
     
     def mouseReleaseEvent(self, event):
         if self.dragging_view and event.button() == Qt.MouseButton.LeftButton:
@@ -159,13 +179,19 @@ class CanvasWidget(QGraphicsView):
     
     def update_temp_connection(self, mouse_pos):
         if self.temp_connection_line and self.connection_source:
-            source_pos = self.connection_source.scenePos() + QPointF(
-                self.connection_source.width/2, 
-                self.connection_source.height/2
-            )
+            if hasattr(self.connection_source, 'get_output_connection_point'):
+                source_local_point = self.connection_source.get_output_connection_point()
+                source_pos = self.connection_source.mapToScene(source_local_point)
+            else:
+                source_rect = self.connection_source.boundingRect()
+                source_pos = self.connection_source.scenePos() + QPointF(
+                    source_rect.width(),
+                    source_rect.height()/2
+                )
+            
             line = QLineF(source_pos, mouse_pos)
             self.temp_connection_line.setLine(line)
-    
+
     def finalize_connection(self, target_widget):
         if self.connection_source and target_widget:
             try:
@@ -180,11 +206,13 @@ class CanvasWidget(QGraphicsView):
                     target_widget.node.id
                 )
                 
+                self.draw_connection(edge)
+                
             except ValueError as e:
                 print(f"Connection failed: {e}")
         
         self.cleanup_connection_mode()
-    
+
     def cancel_connection(self):
         self.cleanup_connection_mode()
     
