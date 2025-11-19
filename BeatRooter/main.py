@@ -1,22 +1,23 @@
 import sys
-import os
-import json
 from PyQt6.QtWidgets import QApplication
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
-
+from ui.welcome_window import WelcomeWindow
 from ui.main_window import DigitalDetectiveBoard
 
 def main():
     app = QApplication(sys.argv)
-
-    font = QFont("Segoe UI", 10)
-    app.setFont(font)
     
-    window = DigitalDetectiveBoard()
-    window.show()
+    welcome = WelcomeWindow()
+    main_window = None
+    
+    def on_project_selected(project_type, category, template_json):
+        nonlocal main_window
+        main_window = DigitalDetectiveBoard(project_type, category, template_json)
+        main_window.show()
+    
+    welcome.project_selected.connect(on_project_selected)
+    welcome.show()
     
     sys.exit(app.exec())
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
