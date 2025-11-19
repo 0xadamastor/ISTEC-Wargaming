@@ -1,0 +1,45 @@
+{
+  "exiftool": {
+    "name": "ExifTool",
+    "script": "exiftool.sh",
+    "check_command": "exiftool",
+    "install_option": "1",
+    "remove_option": "3"
+  },
+  "gobuster": {
+    "name": "GoBuster",
+    "script": "gobuster.sh",
+    "check_command": "gobuster",
+    "install_option": "1",
+    "remove_option": "3"
+  },
+  "nmap": {
+    "name": "Nmap",
+    "script": "nmap.sh",
+    "check_command": "nmap",
+    "install_option": "1",
+    "remove_option": "3"
+  },
+  "dnsutils": {
+    "name": "DNS Utils (nslookup/dig)",
+    "script": "dnsutils.sh",
+    "check_command": ["nslookup", "dig"],
+    "install_option": "1",
+    "remove_option": "2"
+  },
+  "sublist3r": {
+    "name": "Sublist3r",
+    "script": "sublist3r.sh",
+    "check_command": "sublist3r",
+    "special_path": "/opt/Sublist3r",
+    "install_option": "1",
+    "remove_option": "3"
+  },
+  "whois": {
+    "name": "Whois",
+    "script": "whois.sh",
+    "check_command": "whois",
+    "install_option": "1",
+    "remove_option": "2"
+  }
+}
