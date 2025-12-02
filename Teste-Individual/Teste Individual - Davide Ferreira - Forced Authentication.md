@@ -24,12 +24,12 @@ Um atalho.LNK(ficheiro de atalho windows) de comandos que pode ser manipulado pa
 
 
 
-**Um Exemplo: ![](Aspose.Words.e4967d4d-917b-46e6-b17b-086350a32536.003.jpeg)**
+**Um Exemplo:** 
 
 
-
-
-
+<p align="center">
+  <img src="./assets/imagemTesteIndividualDavide.png" width="500">
+</p>
 
 
 
