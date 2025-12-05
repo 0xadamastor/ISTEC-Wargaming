@@ -110,7 +110,7 @@ cd ISTEC-Wargaming
 pip install -r requirements.txt
 
 # (Opcional) Instalar ferramentas de segurança
-python toolInstaller.py
+python BeatRooter/main.py
 ```
 
 ### Iniciar a Aplicação
