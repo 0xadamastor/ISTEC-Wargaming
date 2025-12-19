@@ -83,7 +83,7 @@ Assistente inteligente para acelerar o teu trabalho:
 🤖 "O servidor tem a versão Apache 2.4.29, existem CVEs conhecidos para isto?"
 🤖 "Qual era o IP atribuído ao servidor de base de dados?"
 🤖 "Que credenciais obtive do host 192.168.1.50?"
-🤖 "Sugere-me próximos passos baseado no que já descobri"
+🤖 "Sugere-me os próximos passos baseado no que já descobri"
 ```
 
 ### Sandbox Mode (Planeado e em desenvolvimento)
