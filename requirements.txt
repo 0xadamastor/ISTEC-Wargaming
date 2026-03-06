@@ -1,22 +1,22 @@
 # GUI Framework
-PyQt6==6.6.1
-PyQt6-Qt6==6.6.1
-PyQt6-sip==13.6.0
+PyQt6
+PyQt6-Qt6
+PyQt6-sip
 
 # Image Processing
-Pillow==10.1.0
+Pillow
 
 # PDF Generation
-reportlab==4.0.7
+reportlab
 
 # Web Automation and Scraping
-selenium==4.15.2
-webdriver-manager==4.0.1
-requests==2.31.0
-beautifulsoup4==4.12.2
+selenium
+webdriver-manager
+requests
+beautifulsoup4
 
 # Docker Integration
-docker==7.0.0
+docker
 
 # Data Handling
-python-dateutil==2.8.2
+python-dateutil
