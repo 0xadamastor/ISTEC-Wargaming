@@ -1,0 +1,17 @@
+O beatRooter utiliza várias ferramentas open source que possuem autorização para uso comercial, mas algumas não podem ser integradas sem restrições ou são proibidas, aqui vai uma lista que devemos evitar e porque:
+
+ - Nmap: O nmap permite uso livre para o usuário final, mas não é permitido integrar em um software como o BeatRooter, e o usu comercial custa 120 mil fucking dolares !!!
+          Não podemos distribuir o nmap, isso significar que o BeatRooter não pode fazer o download do nmap.
+          Não podemos integra-lo diretamente no código.
+          Podemos no máximo ler os resultados se o usuário instalar por conta própria na sua máquina.
+
+- Rockyyou: Os dados podem ferir a GDPR porque a origem é de leaks, o que torna o conteúdo ilegal. Corremos o risco de sermos processados pela UE.
+
+- Ghidra: Pode ser ingrado totalmente e é open source, mas não podemos fazer publicidade como produto oficial, EX: "Power by Ghidra".
+          Precisamos incluir nas licenças o ficheiro Licence
+          Se modificarmos o código do Ghidra, precisamos criar um ficheiro que explica a modificação, nomeando de "Notice" e adicionar Ghidra modified version.
+          Manter os copyrights em documentação.
+
+- Ferramentas com licença GPL nós precisamos ter o cuidado de não integrar no código, apenas indicar o download.
+
+
